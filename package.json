@@ -1,0 +1,22 @@
+{
+  "name": "@istrong/thorns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IStrongFE/thorns.git"
+  },
+  "keywords": [
+    "工具类，算法"
+  ],
+  "author": "wsn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IStrongFE/thorns/issues"
+  },
+  "homepage": "https://github.com/IStrongFE/thorns#readme"
+}
