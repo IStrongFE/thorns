@@ -14,47 +14,47 @@ function flat2tree (
   childProp = 'children',
   levelProp = 'level'
 ) {
-  // 1.pid为undefined
-  // 2.pid为0 -不考虑
-  // 3.pid有值，但找不到的情况
-  let cachePid, cacheId 
+  let cachePid = {}, cacheId = {}, nodes = []
   array.forEach(node => {
     let _id = node[idProp]
     let _pid = node[pidProp]
     let _node = Object.assign({}, node, { _id, _pid })
     let cacheRow = cachePid[_pid]
 
-    // undefined also can as a key
+    // undefined also can as a string key
     if (cacheRow) {
       cacheRow.push(_node)
     } else {
-      cachePid[_pid] = [ _node ]
+      cachePid[_pid] = [_node]
     }
     // so the id must unique
-    cacheId[_id] = node
+    cacheId[_id] = _node
+    nodes.push(_node)
   })
+
   const create = function (pid, level = 0) {
     let result = []
 
-    if (pid) {
-      console.log(1)
+    if (pid !== undefined) {
+      result = cachePid[pid] || []
     } else {
-      // undefined 或者 找不到父节点的情况
-      result = cachePid[undefined]
-      nodes.forEach(node => {
-        if (!cacheId[node._pid]) {
-          node[levelProp] = level
-          result.push(node)
-        }
-      })
+      // undefined or no parent as root
+      let nodesUndefined = cachePid[undefined] || []
+      let nodesNoParent = nodes.filter(node => !cacheId[node._pid])
+      result = result.concat(nodesUndefined).concat(nodesNoParent)
     }
-
-    // 递归
+    // recursion
+    level++
     result.forEach(node => {
-      node[childProp] = create(pid, ++level)
+      node[levelProp] = level
+      node[childProp] = create(node._id, level)
     })
+
+    // return a [] or null ?
+    return result
   }
-  return create(array)
+
+  return create()
 }
 
 export default flat2tree
